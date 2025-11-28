@@ -1,0 +1,13 @@
+---
+- hosts: prod
+  remote_user: root
+  tasks:
+    - name: Stop old container
+      shell: docker rm -f projcert-app || true
+
+    - name: Pull latest image from Docker Hub
+      shell: docker pull shinrahmonu/projcert-app:latest
+
+    - name: Run new container
+      shell: docker run -d --name projcert-app -p 80:80 shinrahmonu/projcert-app:latest
+
