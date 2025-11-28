@@ -3,6 +3,7 @@ pipeline {
     
     environment {
         IMAGE_NAME = "projcert-app"
+        DOCKER_HUB_USER = "shinrahmonu"
     }
 
     stages {
@@ -15,14 +16,24 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("${IMAGE_NAME}")
+                    docker.build("${DOCKER_HUB_USER}/${IMAGE_NAME}:latest")
+                }
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
+                        docker.image("${DOCKER_HUB_USER}/${IMAGE_NAME}:latest").push()
+                    }
                 }
             }
         }
 
         stage('Test') {
             steps {
-                echo "Docker build successful!"
+                echo "Docker image pushed to Docker Hub successfully!"
             }
         }
     }
