@@ -36,5 +36,13 @@ pipeline {
                 echo "Docker image pushed to Docker Hub successfully!"
             }
         }
+
+        stage('Deploy to Test Server') {
+            steps {
+                script {
+                    sh 'ansible-playbook deploy-test.yml -i hosts'
+                }
+            }
+        }
     }
 }
