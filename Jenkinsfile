@@ -44,5 +44,13 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy to Prod Server') {
+            steps {
+                withCredentials([sshUserPrivateKey(credentialsId: 'test-server-key', keyFileVariable: 'SSH_KEY')]) {
+                    sh 'ansible-playbook deploy-prod.yml -i hosts --private-key=$SSH_KEY'
+                }
+            }
+        }
     }
 }
