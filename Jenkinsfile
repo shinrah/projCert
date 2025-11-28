@@ -39,8 +39,8 @@ pipeline {
 
         stage('Deploy to Test Server') {
             steps {
-                script {
-                    sh 'ansible-playbook deploy-test.yml -i hosts'
+                withCredentials([sshUserPrivateKey(credentialsId: 'test-server-key', keyFileVariable: 'SSH_KEY')]) {
+                    sh 'ansible-playbook deploy-test.yml -i hosts --private-key=$SSH_KEY'
                 }
             }
         }
