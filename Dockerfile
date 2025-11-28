@@ -1,5 +1,5 @@
 FROM php:7.4-apache
-# copy application code to Apache web root
+# copy application code to Apache web roott
 COPY . /var/www/html
 #set permission
 RUN chown -R www-data:www-data /var/www/html \
