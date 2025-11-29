@@ -1,8 +1,4 @@
-FROM php:7.4-apache
-# copy application code to Apache web rootttt
-COPY . /var/www/html
-#set permission
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html
-#Expose port 80 for web application
-EXPOSE 80
+FROM php:8.2-apache
+COPY . /var/www/html/
+#set correct owner group
+RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
