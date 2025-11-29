@@ -37,26 +37,33 @@ pipeline {
 
         stage('Security Scan Image') {
             steps {
-                sh '''
-                trivy image --exit-code 1 --severity CRITICAL,HIGH $USER/${IMAGE_NAME}:latest
-                '''
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    sh '''
+                    trivy image --exit-code 1 --severity CRITICAL,HIGH $USER/${IMAGE_NAME}:latest
+                    '''
+                }
             }
         }
 
         stage('Deploy Docker Container') {
+            when {
+                expression { currentBuild.currentResult == 'SUCCESS' }
+            }
             steps {
-                sh '''
-                docker stop myphpapp || true
-                docker rm myphpapp || true
-                docker run -d -p 8080:80 --name myphpapp $USER/${IMAGE_NAME}:latest
-                '''
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    sh '''
+                    docker stop myphpapp || true
+                    docker rm myphpapp || true
+                    docker run -d -p 8080:80 --name myphpapp $USER/${IMAGE_NAME}:latest
+                    '''
+                }
             }
         }
     }
 
     post {
         failure {
-            echo "Build Failed — Cleaning up container"
+            echo "Build Failed — Cleaning up container if any exists"
             sh 'docker rm -f myphpapp || true'
         }
     }
