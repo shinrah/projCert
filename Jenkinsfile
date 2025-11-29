@@ -9,7 +9,7 @@ pipeline {
         }
         stage("clone the git repository"){
             steps{
-                git: (url 'https://github.com/shinrah/projCert.git', branch: 'master')
+                git(url 'https://github.com/shinrah/projCert.git', branch: 'master')
             }
         }
     }
