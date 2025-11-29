@@ -14,12 +14,6 @@ pipeline {
             }
         }
 
-    stage {
-        steps {
-            cleanWs()
-        }
-    }
-
         stage('Build Docker Image') {
             steps {
                 sh '''
@@ -68,6 +62,9 @@ pipeline {
     }
 
     post {
+        always {
+            cleanWs()  // 🧹 Clean workspace after build
+        }
         failure {
             echo "Build Failed — Cleaning up container if any exists"
             sh 'docker rm -f myphpapp || true'
