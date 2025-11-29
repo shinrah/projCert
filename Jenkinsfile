@@ -2,15 +2,10 @@ pipeline {
     agent any
 
     stages{
-        stage("clean up workspace") {
-            steps{
-                cleanWs()
-            }
-        }
-        stage("clone the git repository"){
-            steps{
-                git(url 'https://github.com/shinrah/projCert.git', branch: 'master')
-            }
+        stage('clone the repo')
+        steps{
+            git branch: 'master', url: 'https://github.com/shinrah/projCert.git'
+            echo 'repostory sucessfully clone'
         }
     }
 }
