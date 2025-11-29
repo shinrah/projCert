@@ -1,6 +1,6 @@
 FROM php:8.2-apache
 
-COPY . /var/www/html/
+COPY website/ /var/www/html/
 
 # Set correct owner + permissions
 RUN chown -R www-data:www-data /var/www/html/ \
